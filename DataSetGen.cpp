@@ -76,22 +76,44 @@ static std::uint64_t chooseCoprimeStep(std::mt19937_64 &rng)
 
 int main(int argc, char *argv[])
 {
-	// Usage: DataSetGen.exe <dataset_size> <seed>
-	// The seed can be entered as a mixed alphanumeric student-ID token and is converted using the assignment mapping.
-	if (argc != 3)
-	{
-		std::cerr << "Usage: " << argv[0] << " <dataset_size> <seed_token>\n";
-		std::cerr << "Example: " << argv[0] << " 1000 242uc2d3xLX\n";
-		return 1;
-	}
-
 	std::uint64_t datasetSize = 0;
 	std::uint64_t seed = 0;
+	std::string datasetSizeInput;
+	std::string seedToken;
+
+	// Allow first-run input in the terminal when arguments are missing.
+	if (argc >= 2)
+	{
+		datasetSizeInput = argv[1];
+	}
+	else
+	{
+		std::cout << "Enter dataset size: ";
+		if (!std::getline(std::cin, datasetSizeInput))
+		{
+			std::cerr << "Failed to read dataset size.\n";
+			return 1;
+		}
+	}
+
+	if (argc >= 3)
+	{
+		seedToken = argv[2];
+	}
+	else
+	{
+		std::cout << "Enter seed token: ";
+		if (!std::getline(std::cin, seedToken))
+		{
+			std::cerr << "Failed to read seed token.\n";
+			return 1;
+		}
+	}
 
 	try
 	{
-		datasetSize = std::stoull(argv[1]);
-		seed = parseSeedToken(argv[2]);
+		datasetSize = std::stoull(datasetSizeInput);
+		seed = parseSeedToken(seedToken);
 	}
 	catch (const std::exception &)
 	{
