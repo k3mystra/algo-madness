@@ -5,7 +5,7 @@
 #include <random>
 #include <string>
 
-// Generate one random 5-letter lowercase string.
+// Generate one random 5-letter lowercase stringx.
 static std::string generateRandomLabel(std::mt19937_64 &rng)
 {
 	static const char alphabet[] = "abcdefghijklmnopqrstuvwxyz";
