@@ -12,7 +12,8 @@ typedef uint64_t Number;
 
 
 struct Node {
-    std::string value;
+    Number valueNum;
+    std::string valueStr;
     Node* next;
 };
 
@@ -21,7 +22,7 @@ class HashTable {
 public:
     HashTable(int size);
     ~HashTable();
-    void insert(Number key, std::string &value);
+    void insert(Number key, std::string &valueStr);
     void printData();
     std::string searchValue(Number key);
 
@@ -58,7 +59,8 @@ int HashTable::hashValue(Number numValue) {
 
 void HashTable::insert(Number key, std::string &value) {
     Node* nodePtr = new Node {
-        .value = value,
+        .valueNum = key,
+        .valueStr = value,
         .next = nullptr
     };
 
@@ -81,9 +83,10 @@ void HashTable::printData() {
             std::cout << "None" << std::endl;
         else {
             Node* currNodePtr = node;
-            std::cout << currNodePtr->value;
-            while (currNodePtr->next != nullptr) {
-                std::cout << " -> " << currNodePtr->next->value;
+            std::cout << currNodePtr->valueNum << '/' << currNodePtr->valueStr;
+            currNodePtr = currNodePtr->next;
+            while (currNodePtr != nullptr) {
+                std::cout << " -> " << currNodePtr->valueNum << '/' << currNodePtr->valueStr;
                 currNodePtr = currNodePtr->next;
             }
 
@@ -93,7 +96,7 @@ void HashTable::printData() {
 }
 
 
-int extractN(const std::string& filename) {
+int extractDatasetSize(const std::string& filename) {
     // Find the underscore and dot positions
     size_t underscore = filename.find('_');
     size_t dot = filename.find(".csv");
@@ -111,7 +114,7 @@ int main (int argc, char *argv[]) {
     // Write output in specified output file
     std::string datasetFilename = "dataset_1000.csv";
 
-    int tableSize = extractN(datasetFilename);
+    int tableSize = extractDatasetSize(datasetFilename);
     HashTable table(tableSize);
 
     std::ifstream datasetFile(datasetFilename);
@@ -119,13 +122,10 @@ int main (int argc, char *argv[]) {
     while(std::getline(datasetFile, line)) {
         size_t comma = line.find(',');
 
-        std::string keyStr = line.substr(0, comma);
+        Number key = std::stol(line.substr(0, comma));
         std::string word = line.substr(comma + 1);
 
-        std::string value = keyStr + "/" + word;
-        Number key = std::stol(keyStr);
-
-        table.insert(key, value);
+        table.insert(key, word);
     }
 
     table.printData();
