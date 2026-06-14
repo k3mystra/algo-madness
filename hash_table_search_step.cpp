@@ -1,7 +1,6 @@
 #include <iostream>
 #include <ostream>
 #include <string>
-#include <optional>
 #include <vector>
 #include <cstdint>
 #include <fstream>
@@ -12,7 +11,8 @@ typedef uint64_t Number;
 
 
 struct Node {
-    std::string value;
+    Number valueNum;
+    std::string valueStr;
     Node* next;
 };
 
@@ -21,11 +21,12 @@ class HashTable {
 public:
     HashTable(int size);
     ~HashTable();
-    void insert(Number key, std::string &value);
+    void insert(Number key, std::string &valueStr);
     void printData();
+    std::string searchValue(Number key);
 
 private:
-    std::vector<std::optional<Node*>> data;
+    std::vector<Node*> data;
     int hashValue(Number value);
 };
 
@@ -36,17 +37,17 @@ HashTable::HashTable(int size) {
 
 HashTable::~HashTable() {
     for (int i = 0; i < data.size(); i++) {
-        if (!data[i].has_value())
+        if (data[i] == nullptr)
             continue;
 
-        Node* currNodePtr = data[i].value();
+        Node* currNodePtr = data[i];
         while (currNodePtr->next != nullptr) {
             Node* nextNodePtr = currNodePtr->next;
             delete currNodePtr;
             currNodePtr = nextNodePtr;
         }
 
-        data[i].reset();
+        data[i] = nullptr;
     }
 }
 
@@ -57,15 +58,16 @@ int HashTable::hashValue(Number numValue) {
 
 void HashTable::insert(Number key, std::string &value) {
     Node* nodePtr = new Node {
-        .value = value,
+        .valueNum = key,
+        .valueStr = value,
         .next = nullptr
     };
 
     int hashedKey = hashValue(key);
-    if (!data[hashedKey].has_value())
+    if (data[hashedKey] == nullptr)
         data[hashedKey] = nodePtr;
     else {
-        Node* currTraversedNodePtr = data[hashedKey].value();
+        Node* currTraversedNodePtr = data[hashedKey];
         while (currTraversedNodePtr->next != nullptr)
             currTraversedNodePtr = currTraversedNodePtr->next;
         currTraversedNodePtr->next = nodePtr;
@@ -74,15 +76,16 @@ void HashTable::insert(Number key, std::string &value) {
 
 void HashTable::printData() {
     for (int i = 0; i < data.size(); i++) {
-        std::optional<Node *> node = data[i];
+        Node* node = data[i];
         std::cout << i << " ";
-        if (!node.has_value())
+        if (node == nullptr)
             std::cout << "None" << std::endl;
         else {
-            Node* currNodePtr = node.value();
-            std::cout << currNodePtr->value;
-            while (currNodePtr->next != nullptr) {
-                std::cout << " -> " << currNodePtr->next->value;
+            Node* currNodePtr = node;
+            std::cout << currNodePtr->valueNum << '/' << currNodePtr->valueStr;
+            currNodePtr = currNodePtr->next;
+            while (currNodePtr != nullptr) {
+                std::cout << " -> " << currNodePtr->valueNum << '/' << currNodePtr->valueStr;
                 currNodePtr = currNodePtr->next;
             }
 
@@ -91,8 +94,25 @@ void HashTable::printData() {
     }
 }
 
+std::string HashTable::searchValue(Number key) {
+    Number hashedKey = this->hashValue(key);
+    Node* node = data[hashedKey];
 
-int extractN(const std::string& filename) {
+    if (node == nullptr)
+        return "-1";
+
+    do {
+        if (key == node->valueNum)
+            return std::to_string(node->valueNum) + "/" + node->valueStr;
+        node = node->next;
+    }
+    while (node == nullptr);
+
+    return "-1";
+}
+
+
+int extractDatasetSize(const std::string& filename) {
     // Find the underscore and dot positions
     size_t underscore = filename.find('_');
     size_t dot = filename.find(".csv");
@@ -105,12 +125,9 @@ int extractN(const std::string& filename) {
 }
 
 int main (int argc, char *argv[]) {
-    // Ask for target
-    // Find target while listing
-    // Write output in specified output file
     std::string datasetFilename = "dataset_1000.csv";
 
-    int tableSize = extractN(datasetFilename);
+    int tableSize = extractDatasetSize(datasetFilename);
     HashTable table(tableSize);
 
     std::ifstream datasetFile(datasetFilename);
@@ -118,20 +135,29 @@ int main (int argc, char *argv[]) {
     while(std::getline(datasetFile, line)) {
         size_t comma = line.find(',');
 
-        std::string keyStr = line.substr(0, comma);
+        Number key = std::stol(line.substr(0, comma));
         std::string word = line.substr(comma + 1);
 
-        std::string value = keyStr + "/" + word;
-        Number key = std::stol(keyStr);
-
-        table.insert(key, value);
+        table.insert(key, word);
     }
+    datasetFile.close();
 
     table.printData();
 
     Number target;
     std::cout << "Target to search: ";
     std::cin >> target;
+
+    std::string result = table.searchValue(target);
+    std::cout << "Result: " << result << std::endl;
+
+    std::ofstream outputFile("hash_table_search_step_" + std::to_string(target) + ".txt");
+    if (result != "-1")
+        outputFile << target << " = " << result << std::endl;
+    else
+        outputFile << "-1 != " << target << std::endl;
+
+    outputFile.close();
 
     return 0;
 }
