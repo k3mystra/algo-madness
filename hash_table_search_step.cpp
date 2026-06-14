@@ -23,9 +23,10 @@ public:
     ~HashTable();
     void insert(Number key, std::string &value);
     void printData();
+    std::string searchValue(Number key);
 
 private:
-    std::vector<std::optional<Node*>> data;
+    std::vector<Node*> data;
     int hashValue(Number value);
 };
 
@@ -36,17 +37,17 @@ HashTable::HashTable(int size) {
 
 HashTable::~HashTable() {
     for (int i = 0; i < data.size(); i++) {
-        if (!data[i].has_value())
+        if (data[i] == nullptr)
             continue;
 
-        Node* currNodePtr = data[i].value();
+        Node* currNodePtr = data[i];
         while (currNodePtr->next != nullptr) {
             Node* nextNodePtr = currNodePtr->next;
             delete currNodePtr;
             currNodePtr = nextNodePtr;
         }
 
-        data[i].reset();
+        data[i] = nullptr;
     }
 }
 
@@ -62,10 +63,10 @@ void HashTable::insert(Number key, std::string &value) {
     };
 
     int hashedKey = hashValue(key);
-    if (!data[hashedKey].has_value())
+    if (data[hashedKey] == nullptr)
         data[hashedKey] = nodePtr;
     else {
-        Node* currTraversedNodePtr = data[hashedKey].value();
+        Node* currTraversedNodePtr = data[hashedKey];
         while (currTraversedNodePtr->next != nullptr)
             currTraversedNodePtr = currTraversedNodePtr->next;
         currTraversedNodePtr->next = nodePtr;
@@ -74,12 +75,12 @@ void HashTable::insert(Number key, std::string &value) {
 
 void HashTable::printData() {
     for (int i = 0; i < data.size(); i++) {
-        std::optional<Node *> node = data[i];
+        Node* node = data[i];
         std::cout << i << " ";
-        if (!node.has_value())
+        if (node == nullptr)
             std::cout << "None" << std::endl;
         else {
-            Node* currNodePtr = node.value();
+            Node* currNodePtr = node;
             std::cout << currNodePtr->value;
             while (currNodePtr->next != nullptr) {
                 std::cout << " -> " << currNodePtr->next->value;
