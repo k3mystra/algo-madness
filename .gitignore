@@ -1,0 +1,9 @@
+# Built binaries
+*.exe
+a.out
+
+# VSCode
+.vscode/
+
+# Datasets
+dataset_*.csv
