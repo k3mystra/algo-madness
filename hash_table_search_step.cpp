@@ -1,7 +1,6 @@
 #include <iostream>
 #include <ostream>
 #include <string>
-#include <optional>
 #include <vector>
 #include <cstdint>
 #include <fstream>
@@ -126,9 +125,6 @@ int extractDatasetSize(const std::string& filename) {
 }
 
 int main (int argc, char *argv[]) {
-    // Ask for target
-    // Find target while listing
-    // Write output in specified output file
     std::string datasetFilename = "dataset_1000.csv";
 
     int tableSize = extractDatasetSize(datasetFilename);
@@ -144,6 +140,7 @@ int main (int argc, char *argv[]) {
 
         table.insert(key, word);
     }
+    datasetFile.close();
 
     table.printData();
 
@@ -153,6 +150,14 @@ int main (int argc, char *argv[]) {
 
     std::string result = table.searchValue(target);
     std::cout << "Result: " << result << std::endl;
+
+    std::ofstream outputFile("hash_table_search_step_" + std::to_string(target) + ".txt");
+    if (result != "-1")
+        outputFile << target << " = " << result << std::endl;
+    else
+        outputFile << "-1 != " << target << std::endl;
+
+    outputFile.close();
 
     return 0;
 }
