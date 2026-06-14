@@ -95,6 +95,23 @@ void HashTable::printData() {
     }
 }
 
+std::string HashTable::searchValue(Number key) {
+    Number hashedKey = this->hashValue(key);
+    Node* node = data[hashedKey];
+
+    if (node == nullptr)
+        return "-1";
+
+    do {
+        if (key == node->valueNum)
+            return std::to_string(node->valueNum) + "/" + node->valueStr;
+        node = node->next;
+    }
+    while (node == nullptr);
+
+    return "-1";
+}
+
 
 int extractDatasetSize(const std::string& filename) {
     // Find the underscore and dot positions
@@ -133,6 +150,9 @@ int main (int argc, char *argv[]) {
     Number target;
     std::cout << "Target to search: ";
     std::cin >> target;
+
+    std::string result = table.searchValue(target);
+    std::cout << "Result: " << result << std::endl;
 
     return 0;
 }
