@@ -179,7 +179,7 @@ int main (int argc, char *argv[]) {
             table.searchValue(target);
             auto endTime = std::chrono::high_resolution_clock::now();
 
-            currentSampleDuration += std::chrono::duration<float, std::nano>(endTime - startTime).count();
+            currentSampleDuration += std::chrono::duration<double, std::nano>(endTime - startTime).count();
         }
 
         if (n == 0) {
