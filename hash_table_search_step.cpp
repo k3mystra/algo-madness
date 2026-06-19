@@ -126,6 +126,15 @@ int extractDatasetSize(const std::string& filename) {
 
 int main (int argc, char *argv[]) {
     std::string datasetFilename = "dataset_1000.csv";
+    // std::string datasetFilename = "ataset_5000.csv";
+    // std::string datasetFilename = "ataset_10000.csv";
+    // std::string datasetFilename = "ataset_50000.csv";
+    // std::string datasetFilename = "ataset_100000.csv";
+    // std::string datasetFilename = "ataset_200000.csv";
+    // std::string datasetFilename = "ataset_400000.csv";
+    // std::string datasetFilename = "ataset_600000.csv";
+    // std::string datasetFilename = "ataset_800000.csv";
+    // std::string datasetFilename = "ataset_1000000.csv";
 
     int tableSize = extractDatasetSize(datasetFilename);
     HashTable table(tableSize);

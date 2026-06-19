@@ -16,6 +16,8 @@ typedef uint64_t Number;
 const Number MAX_VAL = 9999999999;
 const Number MIN_VAL = 1000000000;
 
+const float DATASET_SAMPLE_PERCENTAGE = 0.1;
+const Number SAMPLING_COUNT = 100;
 
 struct Node {
     Number valueNum;
@@ -133,6 +135,15 @@ int extractDatasetSize(const std::string& filename) {
 
 int main (int argc, char *argv[]) {
     std::string datasetFilename = "dataset_1000.csv";
+    // std::string datasetFilename = "ataset_5000.csv";
+    // std::string datasetFilename = "ataset_10000.csv";
+    // std::string datasetFilename = "ataset_50000.csv";
+    // std::string datasetFilename = "ataset_100000.csv";
+    // std::string datasetFilename = "ataset_200000.csv";
+    // std::string datasetFilename = "ataset_400000.csv";
+    // std::string datasetFilename = "ataset_600000.csv";
+    // std::string datasetFilename = "ataset_800000.csv";
+    // std::string datasetFilename = "ataset_1000000.csv";
 
     Number tableSize = extractDatasetSize(datasetFilename);
     HashTable table(tableSize);
@@ -151,25 +162,13 @@ int main (int argc, char *argv[]) {
 
     table.printData();
 
-    // Get sample proportion
-    // Get no. of sample to take
-    // Total timing for each sample
-
-    float sampleProportion;
-    std::cout << "Dataset proportion for each sample [0,1]: ";
-    std::cin >> sampleProportion;
-
-    Number sampleSize = tableSize * sampleProportion;
-
-    Number sampleNum;
-    std::cout << "No. of samples to take: ";
-    std::cin >> sampleNum;
+    Number sampleSize = tableSize * DATASET_SAMPLE_PERCENTAGE;
 
     std::mt19937_64 rng(std::random_device{}());
     std::uniform_int_distribution<Number> randomTargetGenerator(MIN_VAL, MAX_VAL);
 
     double minSampleDuration, maxSampleDuration, totalDuration = 0;
-    for (Number n = 0; n < sampleNum; n++) {
+    for (Number n = 0; n < SAMPLING_COUNT; n++) {
         long currentSampleDuration;
         for (Number i = 0; i < sampleSize; i++) {
             Number target = randomTargetGenerator(rng);
@@ -199,18 +198,18 @@ int main (int argc, char *argv[]) {
 
     std::ostringstream ss;
 
-    ss << std::fixed << std::setprecision(4);
-
+    ss << std::fixed << std::setprecision(2);
     ss << "=== Setup ===" << '\n';
-    ss << "Sample size: " << sampleSize << " (" << sampleProportion * 100.0 << "% of total dataset)" << '\n';
-    ss << "No. of samples: " << sampleNum << '\n';
+    ss << "Sample size: " << sampleSize << " (" << DATASET_SAMPLE_PERCENTAGE * 100.0 << "% of total dataset)" << '\n';
+    ss << "No. of samples: " << SAMPLING_COUNT << '\n';
 
     ss << '\n';
 
+    ss << std::fixed << std::setprecision(4);
     ss << "=== Result (by samples) ===" << '\n';
     ss << "Best: " << minSampleDuration / 1000 << "ms" << '\n';
     ss << "Worst: " << maxSampleDuration / 1000 << "ms" << '\n';
-    ss << "Avg: " << totalDuration / sampleNum / 1000 << "ms" << '\n';
+    ss << "Avg: " << totalDuration / SAMPLING_COUNT / 1000 << "ms" << '\n';
 
     // Output to cout and file
     std::cout << ss.str();
