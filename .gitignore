@@ -7,3 +7,7 @@ a.out
 
 # Datasets
 dataset_*.csv
+
+# Output files
+hash_table_search_step_*.txt
+hash_table_search_dataset_*.txt

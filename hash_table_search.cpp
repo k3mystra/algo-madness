@@ -1,14 +1,23 @@
+#include <ios>
 #include <iostream>
-#include <ostream>
+#include <iomanip>
 #include <string>
+#include <sstream>
 #include <vector>
 #include <cstdint>
 #include <fstream>
+#include <chrono>
+#include <random>
 
 
 // Standardize input type
 typedef uint64_t Number;
 
+const Number MAX_VAL = 9999999999;
+const Number MIN_VAL = 1000000000;
+
+const float DATASET_SAMPLE_PERCENTAGE = 0.1;
+const Number SAMPLING_COUNT = 100;
 
 struct Node {
     Number valueNum;
@@ -19,7 +28,7 @@ struct Node {
 // Linked-list implementation
 class HashTable {
 public:
-    HashTable(int size);
+    HashTable(Number size);
     ~HashTable();
     void insert(Number key, std::string &valueStr);
     void printData();
@@ -30,7 +39,7 @@ private:
     int hashValue(Number value);
 };
 
-HashTable::HashTable(int size) {
+HashTable::HashTable(Number size) {
     // std::optional default-init to empty
     data.resize(size);
 }
@@ -106,7 +115,7 @@ std::string HashTable::searchValue(Number key) {
             return std::to_string(node->valueNum) + "/" + node->valueStr;
         node = node->next;
     }
-    while (node == nullptr);
+    while (node != nullptr);
 
     return "-1";
 }
@@ -136,7 +145,7 @@ int main (int argc, char *argv[]) {
     // std::string datasetFilename = "ataset_800000.csv";
     // std::string datasetFilename = "ataset_1000000.csv";
 
-    int tableSize = extractDatasetSize(datasetFilename);
+    Number tableSize = extractDatasetSize(datasetFilename);
     HashTable table(tableSize);
 
     std::ifstream datasetFile(datasetFilename);
@@ -153,19 +162,60 @@ int main (int argc, char *argv[]) {
 
     table.printData();
 
-    Number target;
-    std::cout << "Target to search: ";
-    std::cin >> target;
+    Number sampleSize = tableSize * DATASET_SAMPLE_PERCENTAGE;
 
-    std::string result = table.searchValue(target);
-    std::cout << "Result: " << result << std::endl;
+    std::mt19937_64 rng(std::random_device{}());
+    std::uniform_int_distribution<Number> randomTargetGenerator(MIN_VAL, MAX_VAL);
 
-    std::ofstream outputFile("hash_table_search_step_" + std::to_string(target) + ".txt");
-    if (result != "-1")
-        outputFile << target << " = " << result << std::endl;
-    else
-        outputFile << "-1 != " << target << std::endl;
+    double minSampleDuration, maxSampleDuration, totalDuration = 0;
+    for (Number n = 0; n < SAMPLING_COUNT; n++) {
+        long currentSampleDuration;
+        for (Number i = 0; i < sampleSize; i++) {
+            Number target = randomTargetGenerator(rng);
+            
+            // Timing for search
+            auto startTime = std::chrono::high_resolution_clock::now();
+            table.searchValue(target);
+            auto endTime = std::chrono::high_resolution_clock::now();
 
+            currentSampleDuration += std::chrono::duration<double, std::nano>(endTime - startTime).count();
+        }
+
+        if (n == 0) {
+            minSampleDuration = currentSampleDuration;
+            maxSampleDuration = currentSampleDuration;
+        }
+
+        if (currentSampleDuration > maxSampleDuration)
+            maxSampleDuration = currentSampleDuration;
+
+        if (currentSampleDuration < minSampleDuration)
+            minSampleDuration = currentSampleDuration;
+
+        totalDuration += currentSampleDuration;
+        currentSampleDuration = 0;
+    }
+
+    std::ostringstream ss;
+
+    ss << std::fixed << std::setprecision(2);
+    ss << "=== Setup ===" << '\n';
+    ss << "Sample size: " << sampleSize << " (" << DATASET_SAMPLE_PERCENTAGE * 100.0 << "% of total dataset)" << '\n';
+    ss << "No. of samples: " << SAMPLING_COUNT << '\n';
+
+    ss << '\n';
+
+    ss << std::fixed << std::setprecision(4);
+    ss << "=== Result (by samples) ===" << '\n';
+    ss << "Best: " << minSampleDuration / 1000 << "ms" << '\n';
+    ss << "Worst: " << maxSampleDuration / 1000 << "ms" << '\n';
+    ss << "Avg: " << totalDuration / SAMPLING_COUNT / 1000 << "ms" << '\n';
+
+    // Output to cout and file
+    std::cout << ss.str();
+
+    std::ofstream outputFile("hash_table_search_dataset_" + std::to_string(tableSize) + ".txt");
+    outputFile << ss.str();
     outputFile.close();
 
     return 0;
