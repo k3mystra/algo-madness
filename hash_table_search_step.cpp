@@ -1,5 +1,5 @@
 // *********************************************************
-// Program: heap_sort.cpp
+// Program: hash_table_search_step.cpp
 // Course: CCP6214 Algorithm Design and Analysis
 // Lecture Class: TC6L
 // Tutorial Class: T21L
@@ -38,7 +38,7 @@ struct Node {
 // Linked-list implementation
 class HashTable {
 public:
-    HashTable(int size);
+    HashTable(Number size);
     ~HashTable();
     void insert(Number key, std::string &valueStr);
     void printData();
@@ -49,7 +49,7 @@ private:
     int hashValue(Number value);
 };
 
-HashTable::HashTable(int size) {
+HashTable::HashTable(Number size) {
     // std::optional default-init to empty
     data.resize(size);
 }
@@ -125,13 +125,13 @@ std::string HashTable::searchValue(Number key) {
             return std::to_string(node->key) + "/" + node->valueStr;
         node = node->next;
     }
-    while (node == nullptr);
+    while (node != nullptr);
 
     return "-1";
 }
 
 
-int extractDatasetSize(const std::string& filename) {
+Number extractDatasetSize(const std::string& filename) {
     // Find the underscore and dot positions
     size_t underscore = filename.find('_');
     size_t dot = filename.find(".csv");
@@ -140,7 +140,7 @@ int extractDatasetSize(const std::string& filename) {
         throw std::invalid_argument("Invalid filename format");
 
     std::string num_str = filename.substr(underscore + 1, dot - underscore - 1);
-    return std::stoi(num_str);
+    return std::stoll(num_str);
 }
 
 int main (int argc, char *argv[]) {
@@ -158,7 +158,7 @@ int main (int argc, char *argv[]) {
     // Optional override for quick testing: radix_sort.exe <file>
     if (argc >= 2) datasetFilename = argv[1];
 
-    int tableSize = extractDatasetSize(datasetFilename);
+    Number tableSize = extractDatasetSize(datasetFilename);
     HashTable table(tableSize);
 
     std::ifstream datasetFile(datasetFilename);
@@ -166,7 +166,7 @@ int main (int argc, char *argv[]) {
     while(std::getline(datasetFile, line)) {
         size_t comma = line.find(',');
 
-        Number key = std::stol(line.substr(0, comma));
+        Number key = std::stoll(line.substr(0, comma));
         std::string word = line.substr(comma + 1);
 
         table.insert(key, word);
