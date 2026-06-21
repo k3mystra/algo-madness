@@ -1,20 +1,20 @@
-// *******************
+// *********************************************************
 // Program: hash_table_search_step.cpp
 // Course: CCP6214 Algorithm Design and Analysis
 // Lecture Class: TC6L
 // Tutorial Class: T21L
 // Trimester: 2610
 // Member_1: 242UC244SC | AMIRUL HILMAN BIN MOHD YAZID | AMIRUL.HILMAN.MOHD@STUDENT.MMU.EDU.MY | 0125029714
-// Member_2: 242UC240JF | IZZMINHAL AKMAL BIN NORHISYAM| IZZMINHAL.AKMAL.NORHISYAM1@STUDENT.MMU.EDU.MY | 01140348650
-// Member_3: 242UC244LB | TIMOTHY KEW WEN TZUN | TIMOTHY-KEW.WEN.TZUN@STUDENT.MMU.EDU.MY | 0123456789
-// Member_4: 242UC244S7 | Sivasubramaniam A/L Venkateswaran| SIVASUBRAMANIAM.A/L.VENKATESWARAN@STUDENT.MMU.EDU.MY | 0123456789
-// *******************
+// Member_2: 242UC240JF | IZZMINHAL AKMAL BIN NORHISYAM | IZZMINHAL.AKMAL.NORHISYAM1@STUDENT.MMU.EDU.MY | 01140348650
+// Member_3: 242UC244LB | TIMOTHY KEW WEN TZUN | TIMOTHY.KEW.WEN@STUDENT.MMU.EDU.MY | 01137336763
+// Member_4: 242UC244S7 | SIVASUBRAMANIAM A/L VENKATESWARAN | SIVASUBRAMANIAM.VENKATESW@STUDENT.MMU.EDU.MY | 0164263158
+// *********************************************************
 // Task Distribution
-// Member_1:HANDLES THE RADIX SORT 
-// Member_2:HANDLES THE HASH TABLE SEARCH 
-// Member_3:HANDLES THE DATASET GENERATION
-// Member_4:HANDLES THE HEAP SORT 
-// **
+// Member_1: Handles Radix Sort
+// Member_2: Handles Hash Table Search
+// Member_3: Handles Dataset Generation
+// Member_4: Handles Heap Sort
+// *********************************************************
 
 
 #include <iostream>
@@ -30,7 +30,7 @@ typedef uint64_t Number;
 
 
 struct Node {
-    Number valueNum;
+    Number key;
     std::string valueStr;
     Node* next;
 };
@@ -38,7 +38,7 @@ struct Node {
 // Linked-list implementation
 class HashTable {
 public:
-    HashTable(int size);
+    HashTable(Number size);
     ~HashTable();
     void insert(Number key, std::string &valueStr);
     void printData();
@@ -49,7 +49,7 @@ private:
     int hashValue(Number value);
 };
 
-HashTable::HashTable(int size) {
+HashTable::HashTable(Number size) {
     // std::optional default-init to empty
     data.resize(size);
 }
@@ -77,7 +77,7 @@ int HashTable::hashValue(Number numValue) {
 
 void HashTable::insert(Number key, std::string &value) {
     Node* nodePtr = new Node {
-        .valueNum = key,
+        .key = key,
         .valueStr = value,
         .next = nullptr
     };
@@ -101,10 +101,10 @@ void HashTable::printData() {
             std::cout << "None" << std::endl;
         else {
             Node* currNodePtr = node;
-            std::cout << currNodePtr->valueNum << '/' << currNodePtr->valueStr;
+            std::cout << currNodePtr->key << '/' << currNodePtr->valueStr;
             currNodePtr = currNodePtr->next;
             while (currNodePtr != nullptr) {
-                std::cout << " -> " << currNodePtr->valueNum << '/' << currNodePtr->valueStr;
+                std::cout << " -> " << currNodePtr->key << '/' << currNodePtr->valueStr;
                 currNodePtr = currNodePtr->next;
             }
 
@@ -121,17 +121,17 @@ std::string HashTable::searchValue(Number key) {
         return "-1";
 
     do {
-        if (key == node->valueNum)
-            return std::to_string(node->valueNum) + "/" + node->valueStr;
+        if (key == node->key)
+            return std::to_string(node->key) + "/" + node->valueStr;
         node = node->next;
     }
-    while (node == nullptr);
+    while (node != nullptr);
 
     return "-1";
 }
 
 
-int extractDatasetSize(const std::string& filename) {
+Number extractDatasetSize(const std::string& filename) {
     // Find the underscore and dot positions
     size_t underscore = filename.find('_');
     size_t dot = filename.find(".csv");
@@ -140,7 +140,7 @@ int extractDatasetSize(const std::string& filename) {
         throw std::invalid_argument("Invalid filename format");
 
     std::string num_str = filename.substr(underscore + 1, dot - underscore - 1);
-    return std::stoi(num_str);
+    return std::stoll(num_str);
 }
 
 int main (int argc, char *argv[]) {
@@ -155,7 +155,10 @@ int main (int argc, char *argv[]) {
     // std::string datasetFilename = "ataset_800000.csv";
     // std::string datasetFilename = "ataset_1000000.csv";
 
-    int tableSize = extractDatasetSize(datasetFilename);
+    // Optional override for quick testing: radix_sort.exe <file>
+    if (argc >= 2) datasetFilename = argv[1];
+
+    Number tableSize = extractDatasetSize(datasetFilename);
     HashTable table(tableSize);
 
     std::ifstream datasetFile(datasetFilename);
@@ -163,7 +166,7 @@ int main (int argc, char *argv[]) {
     while(std::getline(datasetFile, line)) {
         size_t comma = line.find(',');
 
-        Number key = std::stol(line.substr(0, comma));
+        Number key = std::stoll(line.substr(0, comma));
         std::string word = line.substr(comma + 1);
 
         table.insert(key, word);
