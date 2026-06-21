@@ -37,7 +37,7 @@ void heapSort(Record arr[], int n) {
 }
 
 int main() {
-    string filename = "dataset_1000.csv";
+    // string filename = "dataset_1000.csv";
     // string filename = "dataset_5000.csv";
     // string filename = "dataset_10000.csv";
     // string filename = "dataset_50000.csv";
@@ -46,7 +46,7 @@ int main() {
     // string filename = "dataset_400000.csv";
     // string filename = "dataset_600000.csv";
     // string filename = "dataset_800000.csv";
-    //string filename = "dataset_1000000.csv";
+    string filename = "dataset_1000000.csv";
 
     ifstream inFile(filename);
     if (!inFile) {
