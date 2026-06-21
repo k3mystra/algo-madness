@@ -152,7 +152,7 @@ int extractDatasetSize(const std::string& filename) {
 }
 
 int main (int argc, char *argv[]) {
-    // std::string datasetFilename = "dataset_1000.csv";
+    std::string datasetFilename = "dataset_1000.csv";
     // std::string datasetFilename = "ataset_5000.csv";
     // std::string datasetFilename = "ataset_10000.csv";
     // std::string datasetFilename = "ataset_50000.csv";
@@ -163,7 +163,8 @@ int main (int argc, char *argv[]) {
     // std::string datasetFilename = "ataset_800000.csv";
     // std::string datasetFilename = "ataset_1000000.csv";
 
-    std::string datasetFilename = argv[1];
+    // Optional override for quick testing: radix_sort.exe <file>
+    if (argc >= 2) datasetFilename = argv[1];
 
     Number tableSize = extractDatasetSize(datasetFilename);
     HashTable table(tableSize);
