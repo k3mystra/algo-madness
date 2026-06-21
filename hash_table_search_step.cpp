@@ -1,3 +1,22 @@
+// *******************
+// Program: hash_table_search_step.cpp
+// Course: CCP6214 Algorithm Design and Analysis
+// Lecture Class: TC6L
+// Tutorial Class: T21L
+// Trimester: 2610
+// Member_1: 242UC244SC | AMIRUL HILMAN BIN MOHD YAZID | AMIRUL.HILMAN.MOHD@STUDENT.MMU.EDU.MY | 0125029714
+// Member_2: 242UC240JF | IZZMINHAL AKMAL BIN NORHISYAM| IZZMINHAL.AKMAL.NORHISYAM1@STUDENT.MMU.EDU.MY | 01140348650
+// Member_3: 242UC244LB | TIMOTHY KEW WEN TZUN | TIMOTHY-KEW.WEN.TZUN@STUDENT.MMU.EDU.MY | 0123456789
+// Member_4: 242UC244S7 | Sivasubramaniam A/L Venkateswaran| SIVASUBRAMANIAM.A/L.VENKATESWARAN@STUDENT.MMU.EDU.MY | 0123456789
+// *******************
+// Task Distribution
+// Member_1:HANDLES THE RADIX SORT 
+// Member_2:HANDLES THE HASH TABLE SEARCH 
+// Member_3:HANDLES THE DATASET GENERATION
+// Member_4:HANDLES THE HEAP SORT 
+// **
+
+
 #include <iostream>
 #include <ostream>
 #include <string>
