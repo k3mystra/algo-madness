@@ -27,13 +27,16 @@ struct Record {
 };
 
 void printArray(Record arr[], int n, ofstream &outFile, string label) {
-    outFile << "[";
+    string line = "[";
     for (int i = 0; i < n; i++) {
-        outFile << arr[i].integer << "/" << arr[i].str;
+        line += to_string(arr[i].integer) + "/" + arr[i].str;
         if (i < n - 1)
-            outFile << ", ";
+            line += ", ";
     }
-    outFile << "] " << label << endl;
+    line += "] " + label;
+    
+    outFile << line << endl;  // write to file
+    cout << line << endl;     // also print to terminal/console
 }
 
 void heapify(Record arr[], int n, int i) {
