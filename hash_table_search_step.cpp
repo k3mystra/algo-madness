@@ -30,7 +30,7 @@ typedef uint64_t Number;
 
 
 struct Node {
-    Number valueNum;
+    Number key;
     std::string valueStr;
     Node* next;
 };
@@ -77,7 +77,7 @@ int HashTable::hashValue(Number numValue) {
 
 void HashTable::insert(Number key, std::string &value) {
     Node* nodePtr = new Node {
-        .valueNum = key,
+        .key = key,
         .valueStr = value,
         .next = nullptr
     };
@@ -101,10 +101,10 @@ void HashTable::printData() {
             std::cout << "None" << std::endl;
         else {
             Node* currNodePtr = node;
-            std::cout << currNodePtr->valueNum << '/' << currNodePtr->valueStr;
+            std::cout << currNodePtr->key << '/' << currNodePtr->valueStr;
             currNodePtr = currNodePtr->next;
             while (currNodePtr != nullptr) {
-                std::cout << " -> " << currNodePtr->valueNum << '/' << currNodePtr->valueStr;
+                std::cout << " -> " << currNodePtr->key << '/' << currNodePtr->valueStr;
                 currNodePtr = currNodePtr->next;
             }
 
@@ -121,8 +121,8 @@ std::string HashTable::searchValue(Number key) {
         return "-1";
 
     do {
-        if (key == node->valueNum)
-            return std::to_string(node->valueNum) + "/" + node->valueStr;
+        if (key == node->key)
+            return std::to_string(node->key) + "/" + node->valueStr;
         node = node->next;
     }
     while (node == nullptr);
