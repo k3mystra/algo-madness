@@ -1,3 +1,21 @@
+// *********************************************************
+// Program: heap_sort_step.cpp
+// Course: CCP6214 Algorithm Design and Analysis
+// Lecture Class: TC6L
+// Tutorial Class: T21L
+// Trimester: 2610
+// Member_1: 242UC244SC | AMIRUL HILMAN BIN MOHD YAZID | AMIRUL.HILMAN.MOHD@STUDENT.MMU.EDU.MY | 0125029714
+// Member_2: 242UC240JF | IZZMINHAL AKMAL BIN NORHISYAM | IZZMINHAL.AKMAL.NORHISYAM1@STUDENT.MMU.EDU.MY | 01140348650
+// Member_3: 242UC244LB | TIMOTHY KEW WEN TZUN | TIMOTHY.KEW.WEN@STUDENT.MMU.EDU.MY| 01137336763
+// Member_4: 242UC244S7 | SIVASUBRAMANIAM A/L VENKATESWARAN | SIVASUBRAMANIAM.VENKATESW@STUDENT.MMU.EDU.MY | 0164263158
+// *********************************************************
+// Task Distribution
+// Member_1: Handles Radix Sort
+// Member_2: Handles Hash Table Search
+// Member_3: Handles Dataset Generation
+// Member_4: Handles Heap Sort
+// *********************************************************
+
 #include <iostream>
 #include <fstream>
 #include <string>
