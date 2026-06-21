@@ -105,7 +105,7 @@ int main() {
         return 1;
     }
 
-    outFile << "Running time: " << runningTime << " seconds" << endl;
+    outFile << "Running time: " << runningTime << " seconds / " << runningTime * 1000 << " ms" << endl;
     outFile << endl;
 
     for (int i = 0; i < n; i++)
@@ -115,7 +115,7 @@ int main() {
 
     cout << "Input file: " << filename << endl;
     cout << "Number of elements: " << n << endl;
-    cout << "Running time: " << runningTime << " seconds" << endl;
+    cout << "Running time: " << runningTime << " seconds / " << runningTime * 1000 << " ms" << endl;
     cout << "Output file: " << outputFilename << endl;
 
     delete[] arr;
