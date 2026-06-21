@@ -12,3 +12,4 @@ dataset_*.csv
 hash_table_search_step_*.txt
 hash_table_search_dataset_*.txt
 radix_sort_dataset_*.csv
+heap_sort_dataset_*.csv
