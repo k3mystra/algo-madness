@@ -1,3 +1,21 @@
+// *******************
+// Program: hash_table_search.cpp
+// Course: CCP6214 Algorithm Design and Analysis
+// Lecture Class: TC6L
+// Tutorial Class: T21L
+// Trimester: 2610
+// Member_1: 242UC244SC | AMIRUL HILMAN BIN MOHD YAZID | AMIRUL.HILMAN.MOHD@STUDENT.MMU.EDU.MY | 0125029714
+// Member_2: 242UC240JF | IZZMINHAL AKMAL BIN NORHISYAM| IZZMINHAL.AKMAL.NORHISYAM1@STUDENT.MMU.EDU.MY | 01140348650
+// Member_3: 242UC244LB | TIMOTHY KEW WEN TZUN | TIMOTHY-KEW.WEN.TZUN@STUDENT.MMU.EDU.MY | 0123456789
+// Member_4: 242UC244S7 | Sivasubramaniam A/L Venkateswaran| SIVASUBRAMANIAM.A/L.VENKATESWARAN@STUDENT.MMU.EDU.MY | 0123456789
+// *******************
+// Task Distribution
+// Member_1:HANDLES THE RADIX SORT 
+// Member_2:HANDLES THE HASH TABLE SEARCH 
+// Member_3:HANDLES THE DATASET GENERATION
+// Member_4:HANDLES THE HEAP SORT 
+// **
+
 #include <ios>
 #include <iostream>
 #include <iomanip>
@@ -134,7 +152,7 @@ int extractDatasetSize(const std::string& filename) {
 }
 
 int main (int argc, char *argv[]) {
-    std::string datasetFilename = "dataset_1000.csv";
+    // std::string datasetFilename = "dataset_1000.csv";
     // std::string datasetFilename = "ataset_5000.csv";
     // std::string datasetFilename = "ataset_10000.csv";
     // std::string datasetFilename = "ataset_50000.csv";
@@ -144,6 +162,8 @@ int main (int argc, char *argv[]) {
     // std::string datasetFilename = "ataset_600000.csv";
     // std::string datasetFilename = "ataset_800000.csv";
     // std::string datasetFilename = "ataset_1000000.csv";
+
+    std::string datasetFilename = argv[1];
 
     Number tableSize = extractDatasetSize(datasetFilename);
     HashTable table(tableSize);
@@ -207,9 +227,9 @@ int main (int argc, char *argv[]) {
 
     ss << std::fixed << std::setprecision(4);
     ss << "=== Result (by samples) ===" << '\n';
-    ss << "Best: " << minSampleDuration / 1000 << "ms" << '\n';
-    ss << "Worst: " << maxSampleDuration / 1000 << "ms" << '\n';
-    ss << "Avg: " << totalDuration / SAMPLING_COUNT / 1000 << "ms" << '\n';
+    ss << "Best: " << minSampleDuration / 1000 << "µs" << '\n';
+    ss << "Worst: " << maxSampleDuration / 1000 << "µs" << '\n';
+    ss << "Avg: " << totalDuration / SAMPLING_COUNT / 1000 << "µs" << '\n';
 
     // Output to cout and file
     std::cout << ss.str();
