@@ -185,6 +185,18 @@ int main (int argc, char *argv[]) {
 
     Number sampleSize = tableSize * DATASET_SAMPLE_PERCENTAGE;
 
+    std::ostringstream ss;
+
+    ss << std::fixed << std::setprecision(2);
+    ss << "=== Setup ===" << '\n';
+    ss << "Sample size: " << sampleSize << " (" << DATASET_SAMPLE_PERCENTAGE * 100.0 << "% of total dataset)" << '\n';
+    ss << "No. of samples: " << SAMPLING_COUNT << "\n\n";
+
+    outputFile << ss.str();
+    std::cout << ss.str();
+
+    ss.str("");
+
     std::mt19937_64 rng(std::random_device{}());
     std::uniform_int_distribution<Number> randomTargetGenerator(MIN_VAL, MAX_VAL);
 
@@ -229,16 +241,7 @@ int main (int argc, char *argv[]) {
         outputFile << '\n';
     }
 
-    outputFile << "\n\n";
-
-    std::ostringstream ss;
-
-    ss << std::fixed << std::setprecision(2);
-    ss << "=== Setup ===" << '\n';
-    ss << "Sample size: " << sampleSize << " (" << DATASET_SAMPLE_PERCENTAGE * 100.0 << "% of total dataset)" << '\n';
-    ss << "No. of samples: " << SAMPLING_COUNT << '\n';
-
-    ss << '\n';
+    ss << "\n";
 
     ss << std::fixed << std::setprecision(4);
     ss << "=== Result (by samples) ===" << '\n';
@@ -246,10 +249,9 @@ int main (int argc, char *argv[]) {
     ss << "Worst: " << maxSampleDuration / 1000 << "µs" << '\n';
     ss << "Avg: " << totalDuration / SAMPLING_COUNT / 1000 << "µs" << '\n';
 
-    // Output to cout and file
     std::cout << ss.str();
-
     outputFile << ss.str();
+
     outputFile.close();
 
     return 0;

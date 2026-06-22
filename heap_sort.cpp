@@ -96,7 +96,7 @@ int main() {
     chrono::duration<double> elapsed = end - start;
     double runningTime = elapsed.count();
 
-    string outputFilename = "heap_sort_" + filename;
+    string outputFilename = "heap_sort_dataset_" + to_string(n) + ".txt";
 
     ofstream outFile(outputFilename);
     if (!outFile) {
