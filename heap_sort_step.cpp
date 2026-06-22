@@ -85,8 +85,7 @@ int main() {
     string filename = "dataset_1000000.csv";
 
     
-    // int startRow = 1, endRow = 10;
-    int startRow = 1, endRow = 7;
+    int startRow = 1, endRow = 10;
 
     ifstream inFile(filename);
     if (!inFile) {
