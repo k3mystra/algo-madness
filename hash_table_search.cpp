@@ -180,7 +180,7 @@ int main (int argc, char *argv[]) {
     }
     datasetFile.close();
 
-    table.printData();
+    std::ofstream outputFile("hash_table_search_dataset_" + std::to_string(tableSize) + ".txt");
 
     Number sampleSize = tableSize * DATASET_SAMPLE_PERCENTAGE;
 
@@ -190,13 +190,23 @@ int main (int argc, char *argv[]) {
     double minSampleDuration, maxSampleDuration, totalDuration = 0;
     for (Number n = 0; n < SAMPLING_COUNT; n++) {
         long currentSampleDuration;
+
+        outputFile << "Sample " << n << '\n';
+        outputFile << "-----------------------------------------" << '\n';
         for (Number i = 0; i < sampleSize; i++) {
             Number target = randomTargetGenerator(rng);
             
             // Timing for search
             auto startTime = std::chrono::high_resolution_clock::now();
-            table.searchValue(target);
+            std::string result = table.searchValue(target);
             auto endTime = std::chrono::high_resolution_clock::now();
+
+            if (result != "-1") {
+                outputFile << "Found: " << target << " == " << result << '\n';
+            }
+            else {
+                outputFile << "Not Found: " << target << " != " << -1 << '\n';
+            }
 
             currentSampleDuration += std::chrono::duration<double, std::nano>(endTime - startTime).count();
         }
@@ -214,7 +224,11 @@ int main (int argc, char *argv[]) {
 
         totalDuration += currentSampleDuration;
         currentSampleDuration = 0;
+
+        outputFile << '\n';
     }
+
+    outputFile << "\n\n";
 
     std::ostringstream ss;
 
@@ -234,7 +248,6 @@ int main (int argc, char *argv[]) {
     // Output to cout and file
     std::cout << ss.str();
 
-    std::ofstream outputFile("hash_table_search_dataset_" + std::to_string(tableSize) + ".txt");
     outputFile << ss.str();
     outputFile.close();
 
